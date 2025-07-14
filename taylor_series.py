@@ -4,15 +4,16 @@ import matplotlib.animation as animation
 
 # Generate sine wave data
 np.random.seed(42)
-X = np.linspace(0, 2 * np.pi, 100).reshape(-1, 1)
+X = np.linspace(0, 4 * np.pi, 200).reshape(-1, 1)
+X_scaled = (X - np.pi) / np.pi  # maps [0, 2π] → [-1, 1]
 y_true = np.sin(X)
 
 # Initialize weights and biases for a single hidden layer network
 input_dim = 1
-hidden_dim = 40
+hidden_dim = 100
 output_dim = 1
 lr = 0.01
-epochs = 2000
+epochs = 10000
 
 # Randomly initialize parameters
 W1 = np.random.randn(input_dim, hidden_dim) * np.sqrt(1 / input_dim)
@@ -34,7 +35,7 @@ history = []
 # Training using manual backpropagation
 for epoch in range(epochs):
     # Forward pass
-    Z1 = X.dot(W1) + b1
+    Z1 = X_scaled.dot(W1) + b1
     A1 = tanh(Z1)
     Z2 = A1.dot(W2) + b2
     y_pred = Z2
@@ -43,13 +44,13 @@ for epoch in range(epochs):
     loss = np.mean((y_pred - y_true) ** 2)
 
     # Backpropagation
-    dZ2 = 2 * (y_pred - y_true) / len(X)
+    dZ2 = 2 * (y_pred - y_true) / len(X_scaled)
     dW2 = A1.T.dot(dZ2)
     db2 = np.sum(dZ2, axis=0, keepdims=True)
 
     dA1 = dZ2.dot(W2.T)
     dZ1 = dA1 * tanh_deriv(Z1)
-    dW1 = X.T.dot(dZ1)
+    dW1 = X_scaled.T.dot(dZ1)
     db1 = np.sum(dZ1, axis=0, keepdims=True)
 
     # Update parameters
