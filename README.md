@@ -58,7 +58,7 @@ pip install numpy matplotlib
 Then run:
 
 ```bash
-python taylor_series_expansion.py
+python neural_network_sine_wave.py
 ```
 
 > A window will pop up showing a red line (the network’s prediction) slowly evolving to match the sine wave (blue dashed line) as training progresses.
